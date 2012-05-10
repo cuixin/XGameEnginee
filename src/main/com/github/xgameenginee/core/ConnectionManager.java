@@ -36,7 +36,6 @@ public class ConnectionManager {
 		Connection old = connections.remove(c.getId());
 		if (old != null) {
 			old.setAttachment(null);
-			old.getChannelHandlerContext().setAttachment(null);
 		} else {
 			// XXX: error
 		}
