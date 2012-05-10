@@ -36,7 +36,7 @@ public class EchoServer {
 		 // Print usage if no argument is specified.
         if (args.length < 2 || args.length > 3) {
             System.err.println(
-                    "Usage: " + EchoClient.class.getSimpleName() +
+                    "Usage: " + EchoServer.class.getSimpleName() +
                     " <host> <port> [<first message size>]");
             return;
         }

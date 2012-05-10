@@ -57,7 +57,7 @@ public class EchoClientHandler extends SimpleChannelUpstreamHandler {
     public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) {
         transferredBytes.addAndGet(((ChannelBuffer) e.getMessage()).readableBytes());
         if (value.get() % 10000 == 0) {		
-        	logger.info("read " + transferredBytes.get());
+        	logger.info("send bytes " + transferredBytes.get());
         }
         ChannelBuffer msg = ChannelBuffers.buffer(108);
         msg.writeShort(106);

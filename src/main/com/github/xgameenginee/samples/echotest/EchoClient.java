@@ -69,7 +69,7 @@ public class EchoClient {
         if (args.length == 3) {
             firstMessageSize = Integer.parseInt(args[2]);
         } else {
-            firstMessageSize = 256;
+            firstMessageSize = 100;
         }
 
         new EchoClient(host, port, firstMessageSize).run();
