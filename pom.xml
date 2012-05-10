@@ -1,0 +1,41 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.github.XGameEnginee</groupId>
+  <artifactId>XGameEnginee</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>XGameEnginee</name>
+  <packaging>jar</packaging>
+  <description>游戏通讯和逻辑框架，通讯层基于Netty</description>
+  <dependencies>
+  	<dependency>
+  		<groupId>com.googlecode.sli4j</groupId>
+  		<artifactId>sli4j-slf4j</artifactId>
+  		<version>2.0</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>log4j</groupId>
+  		<artifactId>log4j</artifactId>
+  		<version>1.2.16</version>
+  		<type>bundle</type>
+  	</dependency>
+  	<dependency>
+  		<groupId>com.googlecode.sli4j</groupId>
+  		<artifactId>sli4j-slf4j-log4j</artifactId>
+  		<version>2.0</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>io.netty</groupId>
+  		<artifactId>netty</artifactId>
+  		<version>3.4.0.Final</version>
+  	</dependency>
+  </dependencies>
+  <url>https://github.com/cuixin/XGameEnginee</url>
+  <organization>
+  	<name>The XGameEnginee Project</name>
+  	<url>https://github.com/cuixin/XGameEnginee</url>
+  </organization>
+  <scm>
+  	<url>https://github.com/cuixin/XGameEnginee</url>
+  	<connection>https://github.com/cuixin/XGameEnginee.git</connection>
+  </scm>
+</project>
