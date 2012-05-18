@@ -19,7 +19,7 @@ public final class GameBufferFactory {
 			throw new IllegalArgumentException("readSize must be 2 or 4");
 		}
 		
-		if (!(readSize == 2 || readSize == 4)) {
+		if (!(writeSize == 2 || writeSize == 4)) {
 			throw new IllegalArgumentException("writeSize must be 2 or 4");
 		}
 		readHeader = readSize;

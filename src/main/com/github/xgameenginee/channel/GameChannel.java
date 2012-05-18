@@ -20,7 +20,7 @@ public class GameChannel {
 		channel.remove(c.getChannelHandlerContext().getChannel());
 	}
 	
-	public void broaddcast(Connection except, GameDownBuffer buffer) {
+	public void broadcast(Connection except, GameDownBuffer buffer) {
 		channel.remove(except.getChannelHandlerContext().getChannel());
 		channel.write(buffer);
 		channel.add(except.getChannelHandlerContext().getChannel());
