@@ -44,19 +44,19 @@ public class Connection {
 	
 	private ChannelHandlerContext ctx;
 	
-	public ChannelFuture sendRawData(ByteBuffer buffer) {
+	public void sendRawData(ByteBuffer buffer) {
 		final Channel channel = ctx.getChannel();
-		return channel.write(GameDownBuffer.wrappedBuffer(buffer));
+		channel.write(GameDownBuffer.wrappedBuffer(buffer));
 	}
 	
-	public ChannelFuture sendRawData(byte[] buffer) {
+	public void sendRawData(byte[] buffer) {
 		final Channel channel = ctx.getChannel();
-		return channel.write(GameDownBuffer.wrappedBuffer(buffer));
+		channel.write(GameDownBuffer.wrappedBuffer(buffer));
 	}
 	
-	public ChannelFuture sendGameDownBuffer(GameDownBuffer gameBuffer) {
+	public void sendGameDownBuffer(GameDownBuffer gameBuffer) {
 		final Channel channel = ctx.getChannel();
-		return channel.write(gameBuffer.getChannelBuffer());
+		channel.write(gameBuffer.getChannelBuffer());
 	}
 	
 	public void kill(GameDownBuffer buffer) {
