@@ -27,7 +27,7 @@ public class GamePipeFactory implements ChannelPipelineFactory {
 	public GamePipeFactory(int readSize, int maxReadSize, boolean hasReadSize, int writeSize, boolean hasWriteSize) {
 		GameBufferFactory.setupGameBuffer(readSize, hasReadSize, writeSize, hasWriteSize);
 		this.maxReadSize = maxReadSize;
-		this.readOffset = hasReadSize ? 0 : 2;
+		this.readOffset = hasReadSize ? 0 : readSize;
 	}
 	
 	@Override
