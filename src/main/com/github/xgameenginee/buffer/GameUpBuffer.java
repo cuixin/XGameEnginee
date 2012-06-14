@@ -59,6 +59,10 @@ public class GameUpBuffer {
 		if (len <= 0)
 			throw new IllegalArgumentException("string length cannot less than zero");
 		byte[] strData = new byte[len];
+		if (buffer.readableBytes() < len) {
+			throw new IllegalArgumentException("readableBytes less than " + len);
+		}
+		buffer.readBytes(strData);
 		String result = null;
 		try {
 			result = new String(strData, "UTF-8");
