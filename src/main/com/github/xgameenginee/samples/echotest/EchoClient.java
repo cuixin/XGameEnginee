@@ -10,6 +10,8 @@ import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
 import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 
+import com.github.xgameenginee.buffer.GameBufferFactory;
+
 /**
  * Sends one message when a connection is open and echoes back any received
  * data to the server.  Simply put, the echo client initiates the ping-pong
@@ -30,11 +32,13 @@ public class EchoClient {
 
     public void run() {
         // Configure the client.
+    	GameBufferFactory.setupGameBuffer(2, false, 2, false);
+    	 
         ClientBootstrap bootstrap = new ClientBootstrap(
                 new NioClientSocketChannelFactory(
                         Executors.newCachedThreadPool(),
                         Executors.newCachedThreadPool()));
-
+       
         // Set up the pipeline factory.
         bootstrap.setPipelineFactory(new ChannelPipelineFactory() {
             public ChannelPipeline getPipeline() throws Exception {
@@ -69,7 +73,7 @@ public class EchoClient {
         if (args.length == 3) {
             firstMessageSize = Integer.parseInt(args[2]);
         } else {
-            firstMessageSize = 100;
+            firstMessageSize = 1000;
         }
 
         new EchoClient(host, port, firstMessageSize).run();

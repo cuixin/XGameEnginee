@@ -1,32 +1,27 @@
 package com.github.xgameenginee.samples.echotest;
 
-import java.net.InetSocketAddress;
-import java.util.concurrent.Executors;
-
-
-import org.jboss.netty.bootstrap.ServerBootstrap;
-import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 import org.jboss.netty.logging.InternalLoggerFactory;
 import org.jboss.netty.logging.Slf4JLoggerFactory;
 
-import com.github.xgameenginee.core.GamePipeFactory;
+import com.github.xgameenginee.GameBoss;
+import com.github.xgameenginee.buffer.GameUpBuffer;
+import com.github.xgameenginee.core.GameUpProcessor;
 import com.github.xgameenginee.core.GameWorker;
 import com.github.xgameenginee.handler.GameHandlerManager;
 
 public class EchoServer {
 
 	public void run(String host, short port) {
-		ServerBootstrap bootstrap = new ServerBootstrap(
-				new NioServerSocketChannelFactory(
-						Executors.newCachedThreadPool(),
-						Executors.newCachedThreadPool()));
-
-		bootstrap.setOption("tcpNoDelay", true);
-		// Set up the pipeline factory.
-		bootstrap.setPipelineFactory(new GamePipeFactory(2, 1024, false, 2, false));
-		// Bind and start to accept incoming connections.
-		bootstrap.bind(new InetSocketAddress(host, port));
-		new Thread(GameWorker.getInstance()).start();
+		final GameWorker worker = new GameWorker();
+		new Thread(worker).start();
+		
+		GameBoss.getInstance().bind(2, 1024, 2, host, port, new GameUpProcessor() {
+			@Override
+			public void process(GameUpBuffer buffer) {
+				worker.addConnection(buffer);
+			}
+		});
+		
 	}
 
 	/**

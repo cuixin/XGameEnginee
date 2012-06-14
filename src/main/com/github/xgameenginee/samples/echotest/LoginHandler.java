@@ -22,16 +22,10 @@ public class LoginHandler implements GameHandler {
 			System.out.println("error in number " + number + ":" + (Integer)connection.getAttachment());
 		}
 		connection.setAttachment(number + 1);
-//		ChannelBuffer writeBuffer = ChannelBuffers.buffer(104);
-//		writeBuffer.writeShort(102);
-//		writeBuffer.writeShort(20);
-//		writeBuffer.writeInt(number + 1);
-//		writeBuffer.writeBytes(new byte[96]);
-//		connection.sendRawData(writeBuffer);
 
-		GameDownBuffer writeBuffer = GameDownBuffer.allocat((short)20, 100);
+		GameDownBuffer writeBuffer = GameDownBuffer.allocat((short)20, 1000);
 		writeBuffer.putInt(number + 1);
-		writeBuffer.put(new byte[96]);
+		writeBuffer.put(new byte[996]);
 		connection.sendGameDownBuffer(writeBuffer);
 //		if (number >= 20000) {
 //			cf.addListener(new ChannelFutureListener() {

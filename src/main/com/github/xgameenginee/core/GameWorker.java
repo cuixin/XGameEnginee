@@ -8,7 +8,7 @@ import com.github.xgameenginee.handler.GameHandler;
 import com.github.xgameenginee.handler.GameHandlerManager;
 
 /**
- * 全局消息处理器
+ * 消息处理器
  * @author Steven
  *
  */
@@ -22,12 +22,6 @@ public class GameWorker implements Runnable {
 		}
 	}
 	
-	private static final GameWorker instance = new GameWorker();
-	
-	public static final GameWorker getInstance() {
-		return instance;
-	}
-
 	@Override
 	public void run() {
 		while (true) {

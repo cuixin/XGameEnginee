@@ -35,7 +35,7 @@ public class GamePipeFactory implements ChannelPipelineFactory {
 		return Channels.pipeline(
 //		new GameBytesCounter(),
 //		new GameEventCounter(),
-		new ReadTimeoutHandler(new HashedWheelTimer(), 60), // 一分钟不发送消息断开连接
+//		new ReadTimeoutHandler(new HashedWheelTimer(), 60), // 一分钟不发送消息断开连接
 		new FlashCrossDomainDecoder(),
         new GameDecoder(maxReadSize, 0, GameBufferFactory.getReadHeaderSize(), 0, readOffset),
         new GameEncoder(),

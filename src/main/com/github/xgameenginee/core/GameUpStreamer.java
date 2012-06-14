@@ -16,6 +16,7 @@ import org.jboss.netty.handler.timeout.ReadTimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.xgameenginee.GameBoss;
 import com.github.xgameenginee.buffer.GameUpBuffer;
 
 public class GameUpStreamer extends SimpleChannelUpstreamHandler {
@@ -23,8 +24,7 @@ public class GameUpStreamer extends SimpleChannelUpstreamHandler {
 	private static final Logger logger = LoggerFactory.getLogger(SimpleChannelUpstreamHandler.class);
 	
 	@Override
-	public void handleUpstream(ChannelHandlerContext ctx, ChannelEvent e)
-			throws Exception {
+	public void handleUpstream(ChannelHandlerContext ctx, ChannelEvent e) throws Exception {
 //			logger.info("Handler up " + e.getChannel().getInterestOps());
 		super.handleUpstream(ctx, e);
 	}
@@ -32,14 +32,16 @@ public class GameUpStreamer extends SimpleChannelUpstreamHandler {
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
 		ChannelBuffer cb = (ChannelBuffer)e.getMessage();
-		GameWorker.getInstance().addConnection(new GameUpBuffer(cb, ((Connection)ctx.getAttachment())));
+		GameBoss.getInstance().getProcessor().process(new GameUpBuffer(cb, ((Connection)ctx.getAttachment())));
 //			logger.info("#" +  ctx.getChannel().getId() + " recv = " + type);
 		super.messageReceived(ctx, e);
 	}
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) throws Exception {
-		logger.info("" + e.getCause());
+		if (logger.isDebugEnabled())
+			logger.debug("" + e.getCause());
+		
 		if (e.getCause() instanceof ReadTimeoutException) {
 			if (ctx.getAttachment() != null) {
 				Connection c = (Connection) ctx.getAttachment();
