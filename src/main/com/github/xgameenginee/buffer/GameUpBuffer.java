@@ -7,15 +7,21 @@ import org.jboss.netty.buffer.ChannelBuffer;
 import com.github.xgameenginee.core.Connection;
 
 /**
- * 游戏上行消息
+ * 游戏上行消息或者是计算用途的上行消息
  * @author Steven
  *
  */
 public class GameUpBuffer {
 	
-	private ChannelBuffer buffer;
+	private final ChannelBuffer buffer;
 	
 	private Connection connection;
+	
+	private Object attachment;
+	
+	public Object attachment() {
+		return attachment;
+	}
 	
 	public Connection getConnection() {
 		return connection;
@@ -25,7 +31,22 @@ public class GameUpBuffer {
 		this.connection = connection;
 		this.buffer = buffer;
 	}
-
+	
+	public GameUpBuffer(ChannelBuffer buffer) {
+		this.buffer = buffer;
+	}
+	
+	public GameUpBuffer(ChannelBuffer buffer, Object attachment) {
+		this.buffer = buffer;
+		this.attachment = attachment;
+	}
+	
+	public GameUpBuffer(ChannelBuffer buffer, Connection connection, Object attachment) {
+		this.buffer = buffer;
+		this.connection = connection;
+		this.attachment = attachment;
+	}
+	
 	public short getShort() {
 		return buffer.readShort();
 	}
