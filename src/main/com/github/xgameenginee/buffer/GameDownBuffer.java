@@ -17,31 +17,37 @@ public class GameDownBuffer {
 		this.buffer = buffer;
 	}
 	
-	public void putShort(short value) {
+	public GameDownBuffer putShort(short value) {
 		buffer.writeShort(value);
+		return this;
 	}
 	
-	public void putInt(int value) {
+	public GameDownBuffer putInt(int value) {
 		buffer.writeInt(value);
+		return this;
 	}
 	
-	public void put(byte value) {
+	public GameDownBuffer put(byte value) {
 		buffer.writeByte(value);
+		return this;
 	}
 	
-	public void put(byte[] src) {
+	public GameDownBuffer put(byte[] src) {
 		buffer.writeBytes(src);
+		return this;
 	}
 	
-	public void put(byte[] src, int srcIndex, int length) {
+	public GameDownBuffer put(byte[] src, int srcIndex, int length) {
 		buffer.writeBytes(src, srcIndex, length);
+		return this;
 	}
 	
-	public void putLong(long value) {
+	public GameDownBuffer putLong(long value) {
 		buffer.writeLong(value);
+		return this;
 	}
 	
-	public void putUTFString(String src) {
+	public GameDownBuffer putUTFString(String src) {
 		if (src == null)
 			src = "";
 		byte[] strData;
@@ -53,14 +59,16 @@ public class GameDownBuffer {
 		}
 		buffer.writeShort(strData.length);
 		buffer.writeBytes(strData);
+		return this;
 	}
 	
-	public void putString(String src, String encode) throws UnsupportedEncodingException {
+	public GameDownBuffer putString(String src, String encode) throws UnsupportedEncodingException {
 		if (src == null)
 			src = "";
 		byte[] strData = src.getBytes(encode);
 		buffer.writeShort(strData.length);
 		buffer.writeBytes(strData);
+		return this;
 	}
 	
 	public int remaining() {
