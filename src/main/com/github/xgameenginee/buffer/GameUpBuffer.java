@@ -30,6 +30,10 @@ public class GameUpBuffer {
 		return buffer.readShort();
 	}
 	
+	public byte[] array() {
+		return buffer.array();
+	}
+	
 	public int getInt() {
 		return buffer.readInt();
 	}
