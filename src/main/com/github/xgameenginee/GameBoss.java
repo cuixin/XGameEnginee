@@ -60,7 +60,7 @@ public class GameBoss {
 	 * @param port
 	 * @param processor 上行消息的处理接口
 	 */
-	public void bind(int headerSize, int readMax, int writerSize, String host, short port, GameUpProcessor processor) {
+	public void bind(int headerSize, int readMax, int writerSize, String host, short port, final GameUpProcessor processor) {
 		ServerBootstrap bootstrap = new ServerBootstrap(
 				new NioServerSocketChannelFactory(
 						Executors.newCachedThreadPool(),
@@ -74,6 +74,12 @@ public class GameBoss {
 			logger.error("Server's port :" + port + " not available");
 			return;
 		}
+        Runtime.getRuntime().addShutdownHook(new Thread("System Shutdown Hooker") {
+        	@Override
+        	public void run(){
+        		processor.onShutdown();
+        	}
+        });
 		bootstrap.bind(new InetSocketAddress(host, port));
 		this.processor = processor;
 	}

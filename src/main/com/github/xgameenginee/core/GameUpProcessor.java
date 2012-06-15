@@ -9,5 +9,14 @@ import com.github.xgameenginee.buffer.GameUpBuffer;
  *
  */
 public interface GameUpProcessor {
+	/**
+	 * 处理消息逻辑或者分发你的消息
+	 * @param buffer
+	 */
 	public abstract void process(final GameUpBuffer buffer);
+	
+	/**
+	 * 游戏服务器收到关闭消息
+	 */
+	public abstract void onShutdown();
 }

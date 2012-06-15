@@ -3,6 +3,9 @@ package com.github.xgameenginee.core;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.github.xgameenginee.buffer.GameUpBuffer;
 import com.github.xgameenginee.handler.GameHandler;
 import com.github.xgameenginee.handler.GameHandlerManager;
@@ -13,9 +16,38 @@ import com.github.xgameenginee.handler.GameHandlerManager;
  *
  */
 public class GameWorker implements Runnable {
+	
+	private static final Logger logger = LoggerFactory.getLogger(GameWorker.class);
+	
+	private volatile boolean isRunning = true;
+	
+	/**
+	 * 关闭网络上行消息窗口
+	 */
+	public void closeWorker() {
+		isRunning = false;
+	}
+	
 	Queue<GameUpBuffer> msgQueue = new ConcurrentLinkedQueue<GameUpBuffer>();
 	
-	public void addConnection(GameUpBuffer c) {
+	/**
+	 * 推送网络上行的消息
+	 * @param c
+	 */
+	public void pushUpstreamBuffer(GameUpBuffer c) {
+		if (isRunning) {
+			synchronized (msgQueue) {
+				msgQueue.add(c);
+				msgQueue.notifyAll();
+			}
+		}
+	}
+	
+	/**
+	 * 推送由系统本身产生消息
+	 * @param c
+	 */
+	public void pushSystemBuffer(GameUpBuffer c) {
 		synchronized (msgQueue) {
 			msgQueue.add(c);
 			msgQueue.notifyAll();
@@ -30,8 +62,10 @@ public class GameWorker implements Runnable {
 					try {
 						msgQueue.wait();
 					} catch (InterruptedException e) {
-						e.printStackTrace();
-						return;
+						logger.info("receive an interrupted msg, now the state is " + isRunning);
+						if (!isRunning) {
+							return;
+						}
 					}
 				}
 			}

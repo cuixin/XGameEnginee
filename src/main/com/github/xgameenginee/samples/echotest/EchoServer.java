@@ -18,7 +18,12 @@ public class EchoServer {
 		GameBoss.getInstance().bind(2, 1024, 2, host, port, new GameUpProcessor() {
 			@Override
 			public void process(GameUpBuffer buffer) {
-				worker.addConnection(buffer);
+				worker.pushUpstreamBuffer(buffer);
+			}
+			@Override
+			public void onShutdown() {
+				// System has been killed
+				System.out.println("System has been killed");
 			}
 		});
 		
