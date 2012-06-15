@@ -33,7 +33,7 @@ public class GameUpStreamer extends SimpleChannelUpstreamHandler {
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
 		ChannelBuffer cb = (ChannelBuffer)e.getMessage();
-		if (cb.getShort(0) < 0) // client upstream msg must be more than zero.
+		if (cb.getShort(0) < 1) // client upstream msg must be more than zero.
 			return;
 		
 		GameBoss.getInstance().getProcessor().process(new GameUpBuffer(cb, ((Connection)ctx.getAttachment())));
@@ -95,13 +95,12 @@ public class GameUpStreamer extends SimpleChannelUpstreamHandler {
 	public void channelDisconnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
 		Connection c = (Connection)ctx.getAttachment();
 		if (logger.isDebugEnabled())
-			logger.info("#" + c.getId() + " disconnected");
+			logger.debug("#" + c.getId() + " disconnected");
 		super.channelDisconnected(ctx, e);
-			if (c.getAttachment() != null) {
-			ChannelBuffer cb = ChannelBuffers.buffer(4);
-			cb.writeShort(2);
-			cb.writeShort(-1);
-			GameUpBuffer disconnectEvent = new GameUpBuffer(cb);
+		if (c.getAttachment() != null) {
+			ChannelBuffer cb = ChannelBuffers.buffer(2);
+			cb.writeShort(0);
+			GameUpBuffer disconnectEvent = new GameUpBuffer(cb, c);
 			GameBoss.getInstance().getProcessor().process(disconnectEvent);
 		} else {
 			ConnectionManager.getInstance().removeConnection(c);

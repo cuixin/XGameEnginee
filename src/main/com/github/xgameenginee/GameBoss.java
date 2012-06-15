@@ -61,6 +61,14 @@ public class GameBoss {
 	 * @param processor 上行消息的处理接口
 	 */
 	public void bind(int headerSize, int readMax, int writerSize, String host, short port, final GameUpProcessor processor) {
+		if (isPortAvailable(port)) {
+			logger.info("Server is establishing to listening at :" + port);
+		} else {
+			logger.error("Server's port :" + port + " not available");
+			System.exit(-1);
+			return;
+		}
+		
 		ServerBootstrap bootstrap = new ServerBootstrap(
 				new NioServerSocketChannelFactory(
 						Executors.newCachedThreadPool(),
@@ -68,12 +76,7 @@ public class GameBoss {
 
 		bootstrap.setOption("tcpNoDelay", true);
 		bootstrap.setPipelineFactory(new GamePipeFactory(headerSize, readMax, false, writerSize, false));
-		if (isPortAvailable(port)) {
-			logger.info("Server is establishing to listening at :" + port);
-		} else {
-			logger.error("Server's port :" + port + " not available");
-			return;
-		}
+		
         Runtime.getRuntime().addShutdownHook(new Thread("System Shutdown Hooker") {
         	@Override
         	public void run(){
