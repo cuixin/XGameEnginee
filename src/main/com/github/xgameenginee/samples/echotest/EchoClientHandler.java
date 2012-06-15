@@ -29,7 +29,7 @@ public class EchoClientHandler extends SimpleChannelUpstreamHandler {
         if (firstMessageSize <= 0) {
             throw new IllegalArgumentException("firstMessageSize: " + firstMessageSize);
         }
-        firstMessage = GameDownBuffer.allocat((short)20, // game type
+        firstMessage = GameDownBuffer.allocat(20, // game type
         		firstMessageSize + 4);
         firstMessage.putInt(0); // value
         for (int i = 0; i < firstMessageSize; i++) {
@@ -54,7 +54,7 @@ public class EchoClientHandler extends SimpleChannelUpstreamHandler {
         if (value.get() % 10000 == 0) {		
         	logger.info("send bytes " + transferredBytes.get());
         }
-        GameDownBuffer msg = GameDownBuffer.allocat((short)20, // game type
+        GameDownBuffer msg = GameDownBuffer.allocat(20, // game type
         		104); // game data size
         msg.putInt(value.incrementAndGet()); // value
         for (int i = 0; i < 100; i++) {

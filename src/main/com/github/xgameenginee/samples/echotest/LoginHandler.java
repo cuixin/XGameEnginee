@@ -23,7 +23,7 @@ public class LoginHandler implements GameHandler {
 		}
 		connection.setAttachment(number + 1);
 
-		GameDownBuffer writeBuffer = GameDownBuffer.allocat((short)20, 1000);
+		GameDownBuffer writeBuffer = GameDownBuffer.allocat(20, 1000);
 		writeBuffer.putInt(number + 1);
 		writeBuffer.put(new byte[996]);
 		connection.sendGameDownBuffer(writeBuffer);

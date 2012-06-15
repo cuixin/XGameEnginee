@@ -91,9 +91,9 @@ public class GameDownBuffer {
 		return new GameDownBuffer(ChannelBuffers.wrappedBuffer(buffer));
 	}
 	
-	public static final GameDownBuffer allocat(short gameType, int capacity) {
+	public static final GameDownBuffer allocat(int gameType, int capacity) {
 		GameDownBuffer gb = new GameDownBuffer(GameBufferFactory.getBuffer(capacity + 2));
-		gb.putShort(gameType);
+		gb.putShort((short)gameType);
 		return gb;
 	}
 	

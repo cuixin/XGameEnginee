@@ -3,6 +3,7 @@ package com.github.xgameenginee.core;
 import java.nio.channels.ClosedChannelException;
 
 import org.jboss.netty.buffer.ChannelBuffer;
+import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.ChannelEvent;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ChannelStateEvent;
@@ -32,6 +33,9 @@ public class GameUpStreamer extends SimpleChannelUpstreamHandler {
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
 		ChannelBuffer cb = (ChannelBuffer)e.getMessage();
+		if (cb.getShort(0) < 0) // client upstream msg must be more than zero.
+			return;
+		
 		GameBoss.getInstance().getProcessor().process(new GameUpBuffer(cb, ((Connection)ctx.getAttachment())));
 //			logger.info("#" +  ctx.getChannel().getId() + " recv = " + type);
 		super.messageReceived(ctx, e);
@@ -93,7 +97,18 @@ public class GameUpStreamer extends SimpleChannelUpstreamHandler {
 		if (logger.isDebugEnabled())
 			logger.info("#" + c.getId() + " disconnected");
 		super.channelDisconnected(ctx, e);
-		ConnectionManager.getInstance().removeConnection(c);
+			if (c.getAttachment() != null) {
+			ChannelBuffer cb = ChannelBuffers.buffer(4);
+			cb.writeShort(2);
+			cb.writeShort(-1);
+			GameUpBuffer disconnectEvent = new GameUpBuffer(cb);
+			GameBoss.getInstance().getProcessor().process(disconnectEvent);
+		} else {
+			ConnectionManager.getInstance().removeConnection(c);
+		}
+		// XXX: You need to do this by yourself: 
+		// ConnectionManager.getInstance().removeConnection(c);
+		// when you processed over;
 	}
 
 	@Override
