@@ -1,10 +1,13 @@
 package com.github.xgameenginee;
 
 import java.net.InetSocketAddress;
+import java.net.ServerSocket;
 import java.util.concurrent.Executors;
 
 import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.xgameenginee.core.GamePipeFactory;
 import com.github.xgameenginee.core.GameUpProcessor;
@@ -17,6 +20,8 @@ import com.github.xgameenginee.core.GameUpProcessor;
  *
  */
 public class GameBoss {
+
+	private static final Logger logger = LoggerFactory.getLogger(GameBoss.class);
 	
 	private static final GameBoss instance = new GameBoss();
 	
@@ -29,6 +34,22 @@ public class GameBoss {
 	}
 	
 	private GameUpProcessor processor;
+	
+
+    /**
+     * 端口是否可用
+     * @param port
+     * @return
+     */
+    public static final boolean isPortAvailable(int port) {
+        try {
+            ServerSocket ss = new ServerSocket(port);
+            ss.close();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 	
 	/**
 	 * 绑定游戏端口
@@ -47,6 +68,12 @@ public class GameBoss {
 
 		bootstrap.setOption("tcpNoDelay", true);
 		bootstrap.setPipelineFactory(new GamePipeFactory(headerSize, readMax, false, writerSize, false));
+		if (isPortAvailable(port)) {
+			logger.info("Server is establishing to listening at :" + port);
+		} else {
+			logger.error("Server's port :" + port + " not available");
+			return;
+		}
 		bootstrap.bind(new InetSocketAddress(host, port));
 		this.processor = processor;
 	}
