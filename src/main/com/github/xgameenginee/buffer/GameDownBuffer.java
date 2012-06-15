@@ -62,11 +62,6 @@ public class GameDownBuffer {
 		return this;
 	}
 	
-	public GameDownBuffer putGameDownBuffer(GameDownBuffer gameDownBuffer) {
-		this.getChannelBuffer().writeBytes(gameDownBuffer.getChannelBuffer().array());
-		return this;
-	}
-	
 	public GameDownBuffer putString(String src, String encode) throws UnsupportedEncodingException {
 		if (src == null)
 			src = "";
