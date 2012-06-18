@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.github.XGameEnginee</groupId>
   <artifactId>XGameEnginee</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.1</version>
   <name>XGameEnginee</name>
   <packaging>jar</packaging>
   <description>游戏通讯和逻辑框架，通讯层基于Netty</description>
