@@ -3,9 +3,29 @@
   <groupId>com.github.XGameEnginee</groupId>
   <artifactId>XGameEnginee</artifactId>
   <version>0.0.1</version>
-  <name>XGameEnginee</name>
+  <name>Web Game Engine</name>
   <packaging>jar</packaging>
   <description>游戏通讯和逻辑框架，通讯层基于Netty</description>
+  <url>https://github.com/cuixin/XGameEnginee</url>
+  
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <build>
+	<plugins>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-compiler-plugin</artifactId>
+			<version>2.0.2</version>
+			<configuration>
+				<source>1.6</source>
+				<target>1.6</target>
+			</configuration>
+		</plugin>
+	</plugins>
+  </build>
+
   <dependencies>
   	<dependency>
   		<groupId>com.googlecode.sli4j</groupId>
@@ -29,13 +49,5 @@
   		<version>3.4.0.Final</version>
   	</dependency>
   </dependencies>
-  <url>https://github.com/cuixin/XGameEnginee</url>
-  <organization>
-  	<name>The XGameEnginee Project</name>
-  	<url>https://github.com/cuixin/XGameEnginee</url>
-  </organization>
-  <scm>
-  	<url>https://github.com/cuixin/XGameEnginee</url>
-  	<connection>https://github.com/cuixin/XGameEnginee.git</connection>
-  </scm>
+  
 </project>
