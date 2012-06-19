@@ -22,11 +22,11 @@ public class GameChannel {
 	
 	public void broadcast(Connection except, GameDownBuffer buffer) {
 		channel.remove(except.getChannelHandlerContext().getChannel());
-		channel.write(buffer);
+		channel.write(buffer.getChannelBuffer());
 		channel.add(except.getChannelHandlerContext().getChannel());
 	}
 	
 	public void broadcast(GameDownBuffer buffer) {
-		channel.write(buffer);
+		channel.write(buffer.getChannelBuffer());
 	}
 }
