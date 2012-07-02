@@ -12,12 +12,12 @@ public class GameChannel {
 		channel = new DefaultChannelGroup(name);
 	}
 	
-	public void addConnection(Connection c) {
-		channel.add(c.getChannelHandlerContext().getChannel());
+	public boolean addConnection(Connection c) {
+		return channel.add(c.getChannelHandlerContext().getChannel());
 	}
 	
-	public void removeConnection(Connection c) {
-		channel.remove(c.getChannelHandlerContext().getChannel());
+	public boolean removeConnection(Connection c) {
+		return channel.remove(c.getChannelHandlerContext().getChannel());
 	}
 	
 	public void broadcast(Connection except, GameDownBuffer buffer) {
