@@ -74,8 +74,17 @@ public class GameWorker implements Runnable {
 				short type = c.getShort();
 				try {
 					GameHandler handler = GameHandlerManager.getInstance().getHandler(type);
-					if (handler != null)
-						handler.process(c.getConnection(), c);
+					if (handler != null) {
+						if (!handler.isSystem() && c.attachment() == null) // real upstream message
+							handler.process(c.getConnection(), c);
+						else if (handler.isSystem()) // the system message
+							handler.process(c.getConnection(), c);
+						else {
+							logger.error("error in upstream :" + type);
+						}
+					} else {
+						logger.error("error type = " + type);
+					}
 				} catch (Throwable e) {
 					e.printStackTrace();
 				}

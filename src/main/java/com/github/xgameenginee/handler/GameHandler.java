@@ -18,4 +18,6 @@ public interface GameHandler {
 	 */
 	public abstract void process(final Connection connection, final GameUpBuffer buffer) throws Throwable;
 	
+	public boolean isSystem();
+	
 }

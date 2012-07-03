@@ -39,4 +39,9 @@ public class LoginHandler implements GameHandler {
 //		System.out.println("Number = " + number);
 	}
 
+	@Override
+	public boolean isSystem() {
+		return false;
+	}
+
 }
