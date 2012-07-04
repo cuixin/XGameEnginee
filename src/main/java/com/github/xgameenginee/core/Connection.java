@@ -2,6 +2,7 @@ package com.github.xgameenginee.core;
 
 import java.nio.ByteBuffer;
 
+import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.ChannelFutureListener;
@@ -54,15 +55,22 @@ public class Connection {
 		channel.write(GameDownBuffer.wrappedBuffer(buffer));
 	}
 	
-	public void sendGameDownBuffer(GameDownBuffer gameBuffer) {
+	public void sendGameDownBuffer(GameDownBuffer gameBuffer) throws IllegalStateException {
 		final Channel channel = ctx.getChannel();
+		ChannelBuffer channelBuffer = gameBuffer.getChannelBuffer();
+		if (channelBuffer.writableBytes() != 0)
+			throw new IllegalStateException("write bytes not be full! type = " + gameBuffer.getChannelBuffer().getShort(2));
 		channel.write(gameBuffer.getChannelBuffer());
 	}
 	
-	public void kill(GameDownBuffer buffer) {
+	public void kill(GameDownBuffer buffer) throws IllegalStateException {
 		final Channel channel = ctx.getChannel();
 		if (channel.isConnected()) {
 			if (buffer != null) {
+				ChannelBuffer channelBuffer = buffer.getChannelBuffer();
+				if (channelBuffer.writableBytes() != 0)
+					throw new IllegalStateException("write bytes not be full! type = " + channelBuffer.getShort(2));
+				
 				ChannelFuture cf = channel.write(buffer);
 				cf.addListener(ChannelFutureListener.CLOSE);
 			} else
