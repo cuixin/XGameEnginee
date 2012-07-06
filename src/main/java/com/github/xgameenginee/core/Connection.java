@@ -50,6 +50,14 @@ public class Connection {
 		channel.write(GameDownBuffer.wrappedBuffer(buffer));
 	}
 	
+	public boolean isConnected() {
+		return ctx.getChannel().isConnected();
+	}
+	
+	public void kill() {
+		ctx.getChannel().disconnect();
+	}
+	
 	public void sendRawData(byte[] buffer) {
 		final Channel channel = ctx.getChannel();
 		channel.write(GameDownBuffer.wrappedBuffer(buffer));
@@ -78,10 +86,10 @@ public class Connection {
 		}
 	}
 	
-	public ChannelHandlerContext getChannelHandlerContext() {
-		return ctx;
+	public Channel getChannel() {
+		return ctx.getChannel();
 	}
-
+	
 	public Connection(int id, ChannelHandlerContext ctx) {
 		this.id = id;
 		this.ctx = ctx;

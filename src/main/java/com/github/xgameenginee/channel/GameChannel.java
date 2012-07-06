@@ -13,17 +13,17 @@ public class GameChannel {
 	}
 	
 	public boolean addConnection(Connection c) {
-		return channel.add(c.getChannelHandlerContext().getChannel());
+		return channel.add(c.getChannel());
 	}
 	
 	public boolean removeConnection(Connection c) {
-		return channel.remove(c.getChannelHandlerContext().getChannel());
+		return channel.remove(c.getChannel());
 	}
 	
 	public void broadcast(Connection except, GameDownBuffer buffer) {
-		channel.remove(except.getChannelHandlerContext().getChannel());
+		channel.remove(except.getChannel());
 		channel.write(buffer.getChannelBuffer());
-		channel.add(except.getChannelHandlerContext().getChannel());
+		channel.add(except.getChannel());
 	}
 	
 	public void broadcast(GameDownBuffer buffer) {
