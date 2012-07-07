@@ -55,8 +55,8 @@ public class Connection {
 	}
 	
 	public void kill() {
-		ctx.getChannel().close();
 		ConnectionManager.getInstance().removeConnection(this);
+		ctx.getChannel().close();
 	}
 	
 	public void sendRawData(byte[] buffer) {
@@ -81,11 +81,15 @@ public class Connection {
 					throw new IllegalStateException("write bytes not be full! type = " + channelBuffer.getShort(2));
 				
 				ChannelFuture cf = channel.write(channelBuffer);
-				cf.addListener(ChannelFutureListener.CLOSE);
-			} else
-				ctx.getChannel().close();
-		}
-		ConnectionManager.getInstance().removeConnection(this);
+				cf.addListener(new ChannelFutureListener() {
+					@Override
+					public void operationComplete(ChannelFuture future) throws Exception {
+						kill();
+					}
+				});
+			}
+		} else
+			kill();
 	}
 	
 	public Channel getChannel() {
