@@ -43,9 +43,6 @@ public class GameUpStreamer extends SimpleChannelUpstreamHandler {
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) throws Exception {
-		if (logger.isDebugEnabled())
-			logger.debug("" + e);
-		
 		if (e.getCause() instanceof ReadTimeoutException) {
 			if (ctx.getAttachment() != null) {
 				Connection c = (Connection) ctx.getAttachment();
@@ -63,6 +60,8 @@ public class GameUpStreamer extends SimpleChannelUpstreamHandler {
 		if (e.getCause() instanceof ClosedChannelException) {
 			return;
 		}
+		if (logger.isDebugEnabled())
+			logger.debug("" + e);
 		super.exceptionCaught(ctx, e);
 	}
 
