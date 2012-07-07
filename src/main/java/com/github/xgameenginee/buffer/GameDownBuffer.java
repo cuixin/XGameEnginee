@@ -97,8 +97,16 @@ public class GameDownBuffer {
 		return gb;
 	}
 	
+	private GameDownBuffer(GameDownBuffer buffer) {
+		this.buffer = buffer.getChannelBuffer().duplicate();
+	}
+	
 	public ChannelBuffer getChannelBuffer() {
 		return this.buffer;
+	}
+	
+	public GameDownBuffer duplicate() {
+		return new GameDownBuffer(this);
 	}
 	
 }
