@@ -1,56 +1,41 @@
 package com.github.xgameenginee.channel;
 
-import java.util.HashSet;
-import java.util.Set;
 
+import org.jboss.netty.channel.Channel;
+import org.jboss.netty.channel.group.DefaultChannelGroup;
 import org.slf4j.Logger;
 
 import com.github.xgameenginee.buffer.GameDownBuffer;
 import com.github.xgameenginee.core.Connection;
 
 public class GameChannel {
+	
 	private static final Logger logger = org.slf4j.LoggerFactory.getLogger(GameChannel.class);
-		
-	private Set<Connection> list = new HashSet<Connection>();
+	
+	private DefaultChannelGroup channel;
 	
 	private String name;
 	
 	public GameChannel(String name) {
 		this.name = name;
-	}
-	
-	public String getName() {
-		return name;
+		channel = new DefaultChannelGroup(name);
 	}
 	
 	public boolean addConnection(Connection c) {
-		logger.info(getName() + " joined " + c.getAttachment());
-		return list.add(c);
+		return channel.add(c.getChannel());
 	}
 	
 	public boolean removeConnection(Connection c) {
-		logger.info(getName() + " removed " + c.getAttachment());
-		return list.remove(c);
+		return channel.remove(c.getChannel());
 	}
 	
 	public void broadcast(Connection except, GameDownBuffer buffer) {
-		removeConnection(except);
-		for (Connection c: list) {
-			c.sendGameDownBuffer(buffer.duplicate());
-		}
-		addConnection(except);
+		channel.remove(except.getChannel());
+		channel.write(buffer.getChannelBuffer());
+		channel.add(except.getChannel());
 	}
 	
 	public void broadcast(GameDownBuffer buffer) {
-		StringBuilder sBuilder = new StringBuilder();
-		sBuilder.append(getName() + " broadcast: " + buffer.getChannelBuffer().getShort(2)).append(" size = ").append(list.size());
-		sBuilder.append("{");
-		for (Connection c: list) {
-			sBuilder.append(c.getId()).append("=").append(c.getAttachment()).append(",");
-			c.sendGameDownBuffer(buffer.duplicate());
-		}
-		sBuilder.append("}");
-		logger.info(sBuilder.toString());
-//		channel.write(buffer.getChannelBuffer());
+		channel.write(buffer.getChannelBuffer());
 	}
 }
