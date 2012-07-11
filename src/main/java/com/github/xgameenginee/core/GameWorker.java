@@ -86,7 +86,7 @@ public class GameWorker implements Runnable {
 						logger.error("error type = " + type);
 					}
 				} catch (Throwable e) {
-					e.printStackTrace();
+					logger.error("", e);
 				}
 			}
 		}
