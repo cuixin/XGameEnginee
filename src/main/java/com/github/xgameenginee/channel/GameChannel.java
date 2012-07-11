@@ -1,23 +1,15 @@
 package com.github.xgameenginee.channel;
 
-
-import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.group.DefaultChannelGroup;
-import org.slf4j.Logger;
 
 import com.github.xgameenginee.buffer.GameDownBuffer;
 import com.github.xgameenginee.core.Connection;
 
 public class GameChannel {
 	
-	private static final Logger logger = org.slf4j.LoggerFactory.getLogger(GameChannel.class);
-	
 	private DefaultChannelGroup channel;
 	
-	private String name;
-	
 	public GameChannel(String name) {
-		this.name = name;
 		channel = new DefaultChannelGroup(name);
 	}
 	
