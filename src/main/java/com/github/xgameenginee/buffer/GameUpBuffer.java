@@ -78,7 +78,7 @@ public class GameUpBuffer {
 	public String getUTFString() {
 		int len = buffer.readShort();
 		if (len <= 0 || len > 1024)
-			throw new IllegalArgumentException("string length cannot less than zero or len is more than 1024");
+			throw new IllegalArgumentException("string length cannot less than zero or len is more than 1024, value is " + len);
 		byte[] strData = new byte[len];
 		if (buffer.readableBytes() < len) {
 			throw new IllegalArgumentException("readableBytes less than " + len);
