@@ -4,8 +4,16 @@ public final class HexDump {
 	private final static char[] HEX_DIGITS = { '0', '1', '2', '3', '4', '5',
 			'6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
 
-	public static String dumpHexString(byte[] array) {
+	public static final String dumpHexString(byte[] array) {
 		return dumpHexString(array, 0, array.length);
+	}
+	
+	public static final String dumpHex(byte[] array) {
+		StringBuilder sb = new StringBuilder();
+	    for (byte b : array) {
+	        sb.append(String.format("%x", b));
+	    }
+		return sb.toString();
 	}
 
 	public static String dumpHexString(byte[] array, int offset, int length) {
