@@ -54,6 +54,14 @@ public class GameWorker implements Runnable {
 		}
 	}
 	
+	/**
+	 * 消息执行完毕
+	 * @return
+	 */
+	public boolean isDone() {
+		return msgQueue.isEmpty();
+	}
+	
 	@Override
 	public void run() {
 		while (true) {
