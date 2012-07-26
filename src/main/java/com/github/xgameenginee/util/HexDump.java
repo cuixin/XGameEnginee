@@ -7,14 +7,6 @@ public final class HexDump {
 	public static final String dumpHexString(byte[] array) {
 		return dumpHexString(array, 0, array.length);
 	}
-	
-	public static final String dumpHex(byte[] array) {
-		StringBuilder sb = new StringBuilder();
-	    for (byte b : array) {
-	        sb.append(String.format("%x", b));
-	    }
-		return sb.toString();
-	}
 
 	public static String dumpHexString(byte[] array, int offset, int length) {
 		StringBuilder result = new StringBuilder();
@@ -88,7 +80,7 @@ public final class HexDump {
 
 		return new String(buf);
 	}
-
+	
 	public static String toHexString(int i) {
 		return toHexString(toByteArray(i));
 	}
