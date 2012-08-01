@@ -67,8 +67,9 @@ public class Connection {
 	public void sendGameDownBuffer(GameDownBuffer gameBuffer) throws IllegalStateException {
 		final Channel channel = ctx.getChannel();
 		ChannelBuffer channelBuffer = gameBuffer.getChannelBuffer();
-		if (channelBuffer.writableBytes() != 0)
-			throw new IllegalStateException("write bytes not be full! type = " + gameBuffer.getChannelBuffer().getShort(2));
+		if (channelBuffer.writable()) {
+			throw new IllegalStateException("write bytes not be fill full! type = " + channelBuffer.getShort(2));
+		}		
 		channel.write(gameBuffer.getChannelBuffer());
 	}
 	
@@ -77,8 +78,9 @@ public class Connection {
 		if (channel.isConnected()) {
 			if (buffer != null) {
 				ChannelBuffer channelBuffer = buffer.getChannelBuffer();
-				if (channelBuffer.writableBytes() != 0)
-					throw new IllegalStateException("write bytes not be full! type = " + channelBuffer.getShort(2));
+				if (channelBuffer.writable()) {
+					throw new IllegalStateException("write bytes not be filled full! type = " + channelBuffer.getShort(2));
+				}
 				
 				ChannelFuture cf = channel.write(channelBuffer);
 				cf.addListener(new ChannelFutureListener() {
