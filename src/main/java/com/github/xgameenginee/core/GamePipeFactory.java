@@ -18,6 +18,8 @@ public class GamePipeFactory implements ChannelPipelineFactory {
 	private int readOffset;
 	
 	private int timeOut;
+
+	private HashedWheelTimer timeoutHandler;
 	
 	/**
 	 * 
@@ -32,6 +34,7 @@ public class GamePipeFactory implements ChannelPipelineFactory {
 		this.maxReadSize = maxReadSize;
 		this.readOffset = hasReadSize ? 0 : readSize;
 		this.timeOut = timeOut;
+		timeoutHandler = new HashedWheelTimer();
 	}
 	
 	@Override
@@ -40,7 +43,7 @@ public class GamePipeFactory implements ChannelPipelineFactory {
 			return Channels.pipeline(
 					// new GameBytesCounter(),
 					// new GameEventCounter(),
-					new ReadTimeoutHandler(new HashedWheelTimer(), timeOut), // 一分钟不发送消息断开连接
+					new ReadTimeoutHandler(timeoutHandler, timeOut), // timeout断开连接
 					new FlashCrossDomainDecoder(), new GameDecoder
 							(maxReadSize, 0, GameBufferFactory.getReadHeaderSize(), 0,
 							readOffset), new GameEncoder(),
