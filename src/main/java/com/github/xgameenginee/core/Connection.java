@@ -68,7 +68,7 @@ public class Connection {
 		final Channel channel = ctx.getChannel();
 		ChannelBuffer channelBuffer = gameBuffer.getChannelBuffer();
 		if (channelBuffer.writable()) {
-			throw new IllegalStateException("write bytes not be fill full! type = " + channelBuffer.getShort(2));
+			throw new IllegalStateException("write bytes not be filled full! type = " + channelBuffer.getShort(2));
 		}		
 		channel.write(gameBuffer.getChannelBuffer());
 	}

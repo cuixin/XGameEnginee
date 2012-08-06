@@ -59,8 +59,9 @@ public class GameBoss {
 	 * @param host
 	 * @param port
 	 * @param processor 上行消息的处理接口
+	 * @param timeOut 超时时间(毫秒,如果不检测设为0)
 	 */
-	public void bind(int headerSize, int readMax, int writerSize, String host, short port, final GameUpProcessor processor) {
+	public void bind(int headerSize, int readMax, int writerSize, String host, short port, final GameUpProcessor processor, int timeOut) {
 		if (isPortAvailable(port)) {
 			logger.info("Server is establishing to listening at :" + port);
 		} else {
@@ -75,7 +76,7 @@ public class GameBoss {
 						Executors.newCachedThreadPool()));
 
 		bootstrap.setOption("tcpNoDelay", true);
-		bootstrap.setPipelineFactory(new GamePipeFactory(headerSize, readMax, false, writerSize, false));
+		bootstrap.setPipelineFactory(new GamePipeFactory(headerSize, readMax, false, writerSize, false, timeOut));
 		
         Runtime.getRuntime().addShutdownHook(new Thread("System Shutdown Hooker") {
         	@Override

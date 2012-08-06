@@ -6,6 +6,7 @@ import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFutureListener;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.handler.codec.oneone.OneToOneDecoder;
+import org.jboss.netty.util.CharsetUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,15 +21,20 @@ public class FlashCrossDomainDecoder extends OneToOneDecoder {
 	
 	private Logger logger = LoggerFactory.getLogger(FlashCrossDomainDecoder.class);
 	
+    private static final ChannelBuffer requestBuffer = ChannelBuffers.copiedBuffer("<policy-file-request/>", CharsetUtil.US_ASCII);
+
 	@Override
 	protected Object decode(ChannelHandlerContext ctx, Channel channel, Object msg) throws Exception {
 		if (msg instanceof ChannelBuffer) {
 			ChannelBuffer cb = (ChannelBuffer)msg;
 			if (cb.readableBytes() == 23 && cb.getShort(0) == 15472) {
-				if (logger.isDebugEnabled())
-					logger.debug("replay flashpolicy " + channel.getRemoteAddress());
-				channel.write(ChannelBuffers.wrappedBuffer(XML_REPLAY)).addListener(ChannelFutureListener.CLOSE);
-				return null;
+				ChannelBuffer data = cb.readBytes(requestBuffer.readableBytes());
+				if (data.equals(requestBuffer)) {
+					if (logger.isDebugEnabled())
+						logger.debug("replay flashpolicy " + channel.getRemoteAddress());
+					channel.write(ChannelBuffers.wrappedBuffer(XML_REPLAY)).addListener(ChannelFutureListener.CLOSE);
+					return null;
+				}
 			}
 		}
 		return msg;
