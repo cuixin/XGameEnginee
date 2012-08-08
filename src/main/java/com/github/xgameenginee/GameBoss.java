@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.github.xgameenginee.core.GamePipeFactory;
 import com.github.xgameenginee.core.GameUpProcessor;
+import com.github.xgameenginee.core.ProtocolCoder;
 
 /**
  * 游戏设置类
@@ -35,6 +36,11 @@ public class GameBoss {
 	
 	private GameUpProcessor processor;
 	
+	private ProtocolCoder coder;
+	
+	public ProtocolCoder getProtocolCoder() {
+		return coder;
+	}
 
     /**
      * 端口是否可用
@@ -50,6 +56,12 @@ public class GameBoss {
             return false;
         }
     }
+    
+    private int writeHeaderSize;
+    
+    public int getWriteHeaderSize() {
+    	return writeHeaderSize;
+    }
 	
 	/**
 	 * 绑定游戏端口
@@ -61,7 +73,7 @@ public class GameBoss {
 	 * @param processor 上行消息的处理接口
 	 * @param timeOut 超时时间(毫秒,如果不检测设为0)
 	 */
-	public void bind(int headerSize, int readMax, int writerSize, String host, short port, final GameUpProcessor processor, int timeOut) {
+	public void bind(int headerSize, int readMax, int writerSize, String host, short port, final GameUpProcessor processor, int timeOut, ProtocolCoder coder) {
 		if (isPortAvailable(port)) {
 			logger.info("Server is establishing to listening at :" + port);
 		} else {
@@ -69,7 +81,8 @@ public class GameBoss {
 			System.exit(-1);
 			return;
 		}
-		
+		this.coder = coder;
+		this.writeHeaderSize = writerSize;
 		ServerBootstrap bootstrap = new ServerBootstrap(
 				new NioServerSocketChannelFactory(
 						Executors.newCachedThreadPool(),

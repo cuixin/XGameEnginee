@@ -25,7 +25,7 @@ public class EchoServer {
 				// System has been killed
 				System.out.println("System has been killed");
 			}
-		}, 0);
+		}, 0, null);
 		
 	}
 

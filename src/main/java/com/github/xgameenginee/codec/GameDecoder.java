@@ -5,6 +5,9 @@ import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.handler.codec.frame.LengthFieldBasedFrameDecoder;
 
+import com.github.xgameenginee.GameBoss;
+import com.github.xgameenginee.core.ProtocolCoder;
+
 public class GameDecoder extends LengthFieldBasedFrameDecoder {
 
 	public GameDecoder(int maxFrameLength, int lengthFieldOffset, int lengthFieldLength, int lengthAdjustment, int initialBytesToStrip) {
@@ -13,8 +16,12 @@ public class GameDecoder extends LengthFieldBasedFrameDecoder {
 
 	@Override
 	protected Object decode(ChannelHandlerContext ctx, Channel ch, ChannelBuffer cb) throws Exception {
-		return super.decode(ctx, ch, cb);
-		// TODO: 需要实现解密
+		ChannelBuffer buffer =  (ChannelBuffer)super.decode(ctx, ch, cb);
+		ProtocolCoder coder = GameBoss.getInstance().getProtocolCoder();
+		if (coder != null) {
+			coder.decode(buffer.array());
+		}
+		return buffer;
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.github.xgameenginee.core;
 
+import java.io.IOException;
 import java.nio.channels.ClosedChannelException;
 
 import org.jboss.netty.buffer.ChannelBuffer;
@@ -60,8 +61,13 @@ public class GameUpStreamer extends SimpleChannelUpstreamHandler {
 		if (e.getCause() instanceof ClosedChannelException) {
 			return;
 		}
+		if (e.getCause() instanceof IOException) {
+			logger.debug("", e);
+			ctx.getChannel().close();
+			return;
+		}
 		if (logger.isDebugEnabled())
-			logger.debug("" + e);
+			logger.debug("", e);
 		super.exceptionCaught(ctx, e);
 	}
 
