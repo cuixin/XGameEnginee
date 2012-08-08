@@ -21,13 +21,13 @@ public class GameChannel {
 		return channel.remove(c.getChannel());
 	}
 	
-	public void broadcast(Connection except, GameDownBuffer buffer) {
+	public void broadcast(Connection except, GameDownBuffer buffer) throws Exception {
 		channel.remove(except.getChannel());
 		broadcast(buffer);
 		channel.add(except.getChannel());
 	}
 	
-	public void broadcast(GameDownBuffer buffer) {
+	public void broadcast(GameDownBuffer buffer) throws Exception {
 		if (buffer.getChannelBuffer().writable()) {
 			throw new IllegalStateException("write bytes not be filled full! type = " + buffer.getChannelBuffer().getShort(2));
 		}
