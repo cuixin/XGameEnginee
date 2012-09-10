@@ -19,7 +19,7 @@ public class GameDecoder extends LengthFieldBasedFrameDecoder {
 	protected Object decode(ChannelHandlerContext ctx, Channel ch, ChannelBuffer cb) throws Exception {
 		ChannelBuffer buffer =  (ChannelBuffer)super.decode(ctx, ch, cb);
 		ProtocolCoder coder = GameBoss.getInstance().getProtocolCoder();
-		if (coder != null) {
+		if (coder != null && buffer != null) {
 			byte[] decodebytes = coder.decode(buffer.array());
 			return ChannelBuffers.wrappedBuffer(decodebytes);
 		}
