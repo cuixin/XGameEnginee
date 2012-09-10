@@ -6,7 +6,7 @@ package com.github.xgameenginee.core;
  *
  */
 public interface ProtocolCoder {
-	void encode(byte[] source);
-	void encode(byte[] source, int skipBytes);
-	void decode(byte[] source);
+	byte[] encode(byte[] source);
+	byte[] encode(byte[] source, int skipBytes);
+	byte[] decode(byte[] source);
 }

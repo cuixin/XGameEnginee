@@ -1,6 +1,7 @@
 package com.github.xgameenginee.codec;
 
 import org.jboss.netty.buffer.ChannelBuffer;
+import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.handler.codec.oneone.OneToOneEncoder;
@@ -14,7 +15,9 @@ public class GameEncoder extends OneToOneEncoder {
 		ChannelBuffer buffer = (ChannelBuffer)obj;
 		ProtocolCoder coder = GameBoss.getInstance().getProtocolCoder();
 		if (coder != null) {
-			coder.encode(buffer.array(), GameBoss.getInstance().getWriteHeaderSize());
+			byte[] encodebytes = coder.encode(buffer.array(), 
+					GameBoss.getInstance().getWriteHeaderSize());
+			return ChannelBuffers.wrappedBuffer(encodebytes);
 		}
 		return buffer;
 	}
