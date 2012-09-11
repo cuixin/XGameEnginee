@@ -84,7 +84,10 @@ public class GameHandlerManager {
 	}
 	
 	public GameHandler getHandler(short id) {
-	    return _handlers[id];
+		if ((id >= 0) && (id < _handlers.length))
+			return _handlers[id];
+		else
+			return null;
 	}
 	
 	public static GameHandlerManager getInstance() {
