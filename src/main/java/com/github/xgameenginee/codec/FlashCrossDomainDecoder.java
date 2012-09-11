@@ -32,7 +32,10 @@ public class FlashCrossDomainDecoder extends OneToOneDecoder {
 				if (data.equals(requestBuffer)) {
 					if (logger.isDebugEnabled())
 						logger.debug("replay flashpolicy " + channel.getRemoteAddress());
-					channel.write(ChannelBuffers.wrappedBuffer(XML_REPLAY)).addListener(ChannelFutureListener.CLOSE);
+					ctx.getPipeline().remove(GameEncoder.class);
+					ctx.getPipeline().remove(GameDecoder.class);
+					channel.write(ChannelBuffers.wrappedBuffer(XML_REPLAY))
+					.addListener(ChannelFutureListener.CLOSE);
 					return null;
 				}
 			}
