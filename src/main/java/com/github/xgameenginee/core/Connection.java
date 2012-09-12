@@ -8,6 +8,7 @@ import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.ChannelFutureListener;
 import org.jboss.netty.channel.ChannelHandlerContext;
 
+import com.github.xgameenginee.GameBoss;
 import com.github.xgameenginee.buffer.GameDownBuffer;
 
 public class Connection {
@@ -69,7 +70,12 @@ public class Connection {
 		ChannelBuffer channelBuffer = gameBuffer.getChannelBuffer();
 		if (channelBuffer.writable()) {
 			throw new IllegalStateException("write bytes not be filled full! type = " + channelBuffer.getShort(2));
-		}		
+		}
+		ProtocolCoder coder = GameBoss.getInstance().getProtocolCoder();
+		if (coder != null) {
+			coder.encode(channelBuffer.array(), 
+					GameBoss.getInstance().getWriteHeaderSize());
+		}
 		channel.write(gameBuffer.getChannelBuffer());
 	}
 	
@@ -78,6 +84,12 @@ public class Connection {
 		if (channel.isConnected()) {
 			if (buffer != null) {
 				ChannelBuffer channelBuffer = buffer.getChannelBuffer();
+				ProtocolCoder coder = GameBoss.getInstance().getProtocolCoder();
+				if (coder != null) {
+					coder.encode(channelBuffer.array(), 
+							GameBoss.getInstance().getWriteHeaderSize());
+				}
+				
 				if (channelBuffer.writable()) {
 					throw new IllegalStateException("write bytes not be filled full! type = " + channelBuffer.getShort(2));
 				}

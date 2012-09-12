@@ -2,8 +2,10 @@ package com.github.xgameenginee.channel;
 
 import org.jboss.netty.channel.group.DefaultChannelGroup;
 
+import com.github.xgameenginee.GameBoss;
 import com.github.xgameenginee.buffer.GameDownBuffer;
 import com.github.xgameenginee.core.Connection;
+import com.github.xgameenginee.core.ProtocolCoder;
 
 public class GameChannel {
 	
@@ -30,6 +32,12 @@ public class GameChannel {
 	public void broadcast(GameDownBuffer buffer) throws Exception {
 		if (buffer.getChannelBuffer().writable()) {
 			throw new IllegalStateException("write bytes not be filled full! type = " + buffer.getChannelBuffer().getShort(2));
+		}
+		
+		ProtocolCoder coder = GameBoss.getInstance().getProtocolCoder();
+		if (coder != null) {
+			coder.encode(buffer.getChannelBuffer().array(), 
+					GameBoss.getInstance().getWriteHeaderSize());
 		}
 		channel.write(buffer.getChannelBuffer());
 	}
