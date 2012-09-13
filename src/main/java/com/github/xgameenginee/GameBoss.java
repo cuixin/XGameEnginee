@@ -42,6 +42,10 @@ public class GameBoss {
 		return coder;
 	}
 
+	public void setProtocolCoder(ProtocolCoder coder) {
+		this.coder = coder;
+	}
+	
     /**
      * 端口是否可用
      * @param port
