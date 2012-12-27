@@ -9,17 +9,11 @@ public class GameChannelFactory {
 	
 	private static final GameChannelFactory instance = new GameChannelFactory(); 
 	
-	private GameChannel all = new GameChannel("All");
-	
 	private GameChannelFactory() {
 	}
 	
 	public static final GameChannelFactory getInstance() {
 		return instance;
-	}
-	
-	public GameChannel getAllChannel() {
-		return all;
 	}
 	
 	public GameChannel getChannel(String name) {
