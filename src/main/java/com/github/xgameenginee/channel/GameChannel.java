@@ -41,4 +41,14 @@ public class GameChannel {
 		}
 		channel.write(buffer.getChannelBuffer());
 	}
+	
+	@Override
+	public String toString() {
+		return channel.toString();
+	}
+	
+	public int size() {
+		return channel.size();
+	}
+	
 }
