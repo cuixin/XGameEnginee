@@ -36,7 +36,6 @@
   		<groupId>log4j</groupId>
   		<artifactId>log4j</artifactId>
   		<version>1.2.16</version>
-  		<type>bundle</type>
   	</dependency>
   	<dependency>
   		<groupId>com.googlecode.sli4j</groupId>
@@ -46,7 +45,7 @@
   	<dependency>
   		<groupId>io.netty</groupId>
   		<artifactId>netty</artifactId>
-  		<version>3.5.3.Final</version>
+  		<version>3.5.5.Final</version>
   	</dependency>
   </dependencies>
   
