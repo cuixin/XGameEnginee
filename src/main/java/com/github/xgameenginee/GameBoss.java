@@ -2,10 +2,9 @@ package com.github.xgameenginee;
 
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
-import java.util.concurrent.Executors;
+import java.net.SocketAddress;
 
 import org.jboss.netty.bootstrap.ServerBootstrap;
-import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,7 +76,7 @@ public class GameBoss {
 	 * @param processor 上行消息的处理接口
 	 * @param timeOut 超时时间(毫秒,如果不检测设为0)
 	 */
-	public void bind(int headerSize, int readMax, int writerSize, String host, short port, final GameUpProcessor processor, int timeOut, ProtocolCoder coder) {
+	public void bind(ServerBootstrap bootstrap, int headerSize, int readMax, int writerSize, String host, short port, final GameUpProcessor processor, int timeOut, ProtocolCoder coder) {
 		if (isPortAvailable(port)) {
 			logger.info("Server is establishing to listening at :" + port);
 		} else {
@@ -87,21 +86,50 @@ public class GameBoss {
 		}
 		this.coder = coder;
 		this.writeHeaderSize = writerSize;
-		ServerBootstrap bootstrap = new ServerBootstrap(
-				new NioServerSocketChannelFactory(
-						Executors.newCachedThreadPool(),
-						Executors.newCachedThreadPool()));
-
 		bootstrap.setOption("tcpNoDelay", true);
 		bootstrap.setPipelineFactory(new GamePipeFactory(headerSize, readMax, false, writerSize, false, timeOut));
-		
-        Runtime.getRuntime().addShutdownHook(new Thread("System Shutdown Hooker") {
-        	@Override
-        	public void run(){
-        		processor.onShutdown();
-        	}
-        });
+		addShutdownHooker();
 		bootstrap.bind(new InetSocketAddress(host, port));
 		this.processor = processor;
 	}
+	
+	private void addShutdownHooker() {
+        Runtime.getRuntime().addShutdownHook(new Thread("System Shutdown Hooker") {
+            @Override
+            public void run() {
+                processor.onShutdown();
+                Bootstrap.release();
+            }
+        });
+	}
+	
+	/**
+     * 绑定多个游戏端口
+     * @param headerSize
+     * @param readMax
+     * @param writerSize
+     * @param host
+     * @param port
+     * @param processor 上行消息的处理接口
+     * @param timeOut 超时时间(毫秒,如果不检测设为0)
+     */
+    public void bind(ServerBootstrap bootstrap, int headerSize, int readMax, int writerSize, InetSocketAddress[] addrs, final GameUpProcessor processor, int timeOut, ProtocolCoder coder) {
+        for (InetSocketAddress socketAddr:addrs) {
+            if (isPortAvailable(socketAddr.getPort())) {
+                logger.info("Server is establishing to listening at :" + socketAddr.getPort());
+            } else {
+                logger.error("Server's port :" + socketAddr.getPort() + " not available");
+                System.exit(-1);
+            }
+        }
+        this.coder = coder;
+        this.writeHeaderSize = writerSize;
+        bootstrap.setOption("tcpNoDelay", true);
+        bootstrap.setPipelineFactory(new GamePipeFactory(headerSize, readMax, false, writerSize, false, timeOut));
+        addShutdownHooker();
+        for (SocketAddress socketAddr:addrs) {
+            Bootstrap.addChannel(bootstrap.bind(socketAddr));
+        }
+        this.processor = processor;
+    }
 }

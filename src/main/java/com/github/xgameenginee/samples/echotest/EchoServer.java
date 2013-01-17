@@ -3,6 +3,7 @@ package com.github.xgameenginee.samples.echotest;
 import org.jboss.netty.logging.InternalLoggerFactory;
 import org.jboss.netty.logging.Slf4JLoggerFactory;
 
+import com.github.xgameenginee.Bootstrap;
 import com.github.xgameenginee.GameBoss;
 import com.github.xgameenginee.buffer.GameUpBuffer;
 import com.github.xgameenginee.core.GameUpProcessor;
@@ -15,7 +16,7 @@ public class EchoServer {
 		final GameWorker worker = new GameWorker();
 		new Thread(worker).start();
 		
-		GameBoss.getInstance().bind(2, 1024, 2, host, port, new GameUpProcessor() {
+		GameBoss.getInstance().bind(Bootstrap.defaultBootstrap(), 2, 1024, 2, host, port, new GameUpProcessor() {
 			@Override
 			public void process(GameUpBuffer buffer) {
 				worker.pushUpstreamBuffer(buffer);
