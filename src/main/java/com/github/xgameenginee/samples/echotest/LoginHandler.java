@@ -28,16 +28,11 @@ public class LoginHandler implements GameHandler {
         writeBuffer.putInt(number + 1);
         writeBuffer.put(new byte[996]);
         connection.sendGameDownBuffer(writeBuffer);
-//        if (number >= 20000) {
-//            cf.addListener(new ChannelFutureListener() {
-//
-//                @Override
-//                public void operationComplete(ChannelFuture future) throws Exception {
-//                    connection.kill(null);
-//                }
-//            });
-//        }
-//        System.out.println("Number = " + number);
+        if (connection.isKilled())
+            System.out.println("Number = " + number);
+        if (number >= 20000) {
+            connection.kill();
+        }
     }
 
     @Override

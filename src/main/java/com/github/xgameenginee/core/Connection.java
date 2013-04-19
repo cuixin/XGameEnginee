@@ -61,9 +61,17 @@ public class Connection {
         return ctx.getChannel().isConnected();
     }
 
+    private volatile boolean isKilled = false;
+    
+    public boolean isKilled() {
+        return isKilled;
+    }
+    
     public void kill() {
-        ConnectionManager.getInstance().removeConnection(this);
-        ctx.getChannel().close();
+        if (!isKilled) {
+            isKilled = true;
+            ctx.getChannel().close();
+        }
     }
 
     public void sendRawData(byte[] buffer) {

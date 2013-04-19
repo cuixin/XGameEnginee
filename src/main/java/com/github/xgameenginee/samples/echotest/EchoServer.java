@@ -50,6 +50,7 @@ public class EchoServer {
 
         try {
             GameHandlerManager.getInstance().register(LoginHandler.class, (short) 20);
+            GameHandlerManager.getInstance().register(DisconnectedHandler.class, (short)0);
         } catch (Exception e) {
             e.printStackTrace();
             return;
