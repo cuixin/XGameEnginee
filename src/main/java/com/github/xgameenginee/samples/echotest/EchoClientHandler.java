@@ -16,11 +16,11 @@ import com.github.xgameenginee.buffer.GameDownBuffer;
 
 public class EchoClientHandler extends SimpleChannelUpstreamHandler {
 
-    private static final Logger logger = LoggerFactory.getLogger(EchoClientHandler.class);
+    private static final Logger  logger           = LoggerFactory.getLogger(EchoClientHandler.class);
 
     private final GameDownBuffer firstMessage;
-    
-    private final AtomicLong transferredBytes = new AtomicLong();
+
+    private final AtomicLong     transferredBytes = new AtomicLong();
 
     /**
      * Creates a client-side handler.
@@ -30,7 +30,7 @@ public class EchoClientHandler extends SimpleChannelUpstreamHandler {
             throw new IllegalArgumentException("firstMessageSize: " + firstMessageSize);
         }
         firstMessage = GameDownBuffer.allocat(20, // game type
-        		firstMessageSize + 4);
+                firstMessageSize + 4);
         firstMessage.putInt(0); // value
         for (int i = 0; i < firstMessageSize; i++) {
             firstMessage.put((byte) i);
@@ -47,15 +47,15 @@ public class EchoClientHandler extends SimpleChannelUpstreamHandler {
     }
 
     AtomicInteger value = new AtomicInteger();
-    
+
     @Override
     public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) {
         transferredBytes.addAndGet(((ChannelBuffer) e.getMessage()).readableBytes());
-        if (value.get() % 10000 == 0) {		
-        	logger.info("send bytes " + transferredBytes.get());
+        if (value.get() % 10000 == 0) {
+            logger.info("send bytes " + transferredBytes.get());
         }
         GameDownBuffer msg = GameDownBuffer.allocat(20, // game type
-        		104); // game data size
+                104); // game data size
         msg.putInt(value.incrementAndGet()); // value
         for (int i = 0; i < 100; i++) {
             msg.put((byte) i);

@@ -13,48 +13,48 @@ import com.github.xgameenginee.codec.GameEncoder;
 
 public class GamePipeFactory implements ChannelPipelineFactory {
 
-	private int maxReadSize;
-	
-	private int readOffset;
-	
-	private int timeOut;
+    private int              maxReadSize;
 
-	private HashedWheelTimer timeoutHandler;
-	
-	/**
-	 * 
-	 * @param readSize
-	 * @param maxReadSize
-	 * @param hasReadSize 是否读取消息中的包含消息本身的大小
-	 * @param writeSize
-	 * @param timeOut 超时时间
-	 */
-	public GamePipeFactory(int readSize, int maxReadSize, boolean hasReadSize, int writeSize, boolean hasWriteSize, int timeOut) {
-		GameBufferFactory.setupGameBuffer(readSize, hasReadSize, writeSize, hasWriteSize);
-		this.maxReadSize = maxReadSize;
-		this.readOffset = hasReadSize ? 0 : readSize;
-		this.timeOut = timeOut;
-		timeoutHandler = new HashedWheelTimer();
-	}
-	
-	@Override
-	public ChannelPipeline getPipeline() throws Exception {
-		if (timeOut > 0)
-			return Channels.pipeline(
-					// new GameBytesCounter(),
-					// new GameEventCounter(),
-					new ReadTimeoutHandler(timeoutHandler, timeOut), // timeout断开连接
-					new FlashCrossDomainDecoder(), new GameDecoder
-							(maxReadSize, 0, GameBufferFactory.getReadHeaderSize(), 0,
-							readOffset), new GameEncoder(),
-					new GameUpStreamer());
-		else {
-			return Channels.pipeline(
-					new FlashCrossDomainDecoder(),
-					new GameDecoder(maxReadSize, 0, GameBufferFactory
-							.getReadHeaderSize(), 0, readOffset),
-					new GameEncoder(), new GameUpStreamer());
-		}
-	}
+    private int              readOffset;
+
+    private int              timeOut;
+
+    private HashedWheelTimer timeoutHandler;
+
+    /**
+     * 
+     * @param readSize
+     * @param maxReadSize
+     * @param hasReadSize
+     *            是否读取消息中的包含消息本身的大小
+     * @param writeSize
+     * @param timeOut
+     *            超时时间
+     */
+    public GamePipeFactory(int readSize, int maxReadSize, boolean hasReadSize, int writeSize, boolean hasWriteSize, int timeOut) {
+        GameBufferFactory.setupGameBuffer(readSize, hasReadSize, writeSize, hasWriteSize);
+        this.maxReadSize = maxReadSize;
+        this.readOffset = hasReadSize ? 0 : readSize;
+        this.timeOut = timeOut;
+        timeoutHandler = new HashedWheelTimer();
+    }
+
+    @Override
+    public ChannelPipeline getPipeline() throws Exception {
+        if (timeOut > 0)
+            return Channels.pipeline(
+                    // new GameBytesCounter(),
+                    // new GameEventCounter(),
+                    new ReadTimeoutHandler(timeoutHandler, timeOut), // timeout断开连接
+                    new FlashCrossDomainDecoder(), new GameDecoder(maxReadSize, 0, GameBufferFactory.getReadHeaderSize(), 0, readOffset), 
+                    new GameEncoder(),
+                    new GameUpStreamer());
+        else {
+            return Channels.pipeline(
+                    new FlashCrossDomainDecoder(), 
+                    new GameDecoder(maxReadSize, 0, GameBufferFactory.getReadHeaderSize(), 0, readOffset),
+                    new GameEncoder(), new GameUpStreamer());
+        }
+    }
 
 }

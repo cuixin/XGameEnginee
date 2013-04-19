@@ -13,17 +13,17 @@ import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 import com.github.xgameenginee.buffer.GameBufferFactory;
 
 /**
- * Sends one message when a connection is open and echoes back any received
- * data to the server.  Simply put, the echo client initiates the ping-pong
- * traffic between the echo client and server by sending the first message to
- * the server.
+ * Sends one message when a connection is open and echoes back any received data
+ * to the server. Simply put, the echo client initiates the ping-pong traffic
+ * between the echo client and server by sending the first message to the
+ * server.
  */
 public class EchoClient {
 
     private final String host;
-    private final int port;
-    private final int firstMessageSize;
-    
+    private final int    port;
+    private final int    firstMessageSize;
+
     public EchoClient(String host, int port, int firstMessageSize) {
         this.host = host;
         this.port = port;
@@ -32,18 +32,15 @@ public class EchoClient {
 
     public void run() {
         // Configure the client.
-    	GameBufferFactory.setupGameBuffer(2, false, 2, false);
-    	 
-        ClientBootstrap bootstrap = new ClientBootstrap(
-                new NioClientSocketChannelFactory(
-                        Executors.newCachedThreadPool(),
-                        Executors.newCachedThreadPool()));
-       
+        GameBufferFactory.setupGameBuffer(2, false, 2, false);
+
+        ClientBootstrap bootstrap = new ClientBootstrap(new 
+                NioClientSocketChannelFactory(Executors.newCachedThreadPool(), Executors.newCachedThreadPool()));
+
         // Set up the pipeline factory.
         bootstrap.setPipelineFactory(new ChannelPipelineFactory() {
             public ChannelPipeline getPipeline() throws Exception {
-                return Channels.pipeline(
-                        new EchoClientHandler(firstMessageSize));
+                return Channels.pipeline(new EchoClientHandler(firstMessageSize));
             }
         });
 
@@ -60,9 +57,7 @@ public class EchoClient {
     public static void main(String[] args) throws Exception {
         // Print usage if no argument is specified.
         if (args.length < 2 || args.length > 3) {
-            System.err.println(
-                    "Usage: " + EchoClient.class.getSimpleName() +
-                    " <host> <port> [<first message size>]");
+            System.err.println("Usage: " + EchoClient.class.getSimpleName() + " <host> <port> [<first message size>]");
             return;
         }
 

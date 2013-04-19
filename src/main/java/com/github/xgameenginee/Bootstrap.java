@@ -10,10 +10,10 @@ import org.jboss.netty.channel.group.DefaultChannelGroup;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 
 public class Bootstrap {
-    private static ServerBootstrap bootstrap = null;
-    
-    private static ChannelGroup allChannels = new DefaultChannelGroup();
-    
+    private static ServerBootstrap bootstrap   = null;
+
+    private static ChannelGroup    allChannels = new DefaultChannelGroup();
+
     public static final synchronized void addChannel(Channel channel) {
         allChannels.add(channel);
     }
@@ -21,24 +21,20 @@ public class Bootstrap {
     public static final synchronized ServerBootstrap defaultBootstrap() {
         if (bootstrap == null)
             bootstrap = new ServerBootstrap(new NioServerSocketChannelFactory(
-                    Executors.newCachedThreadPool(),
-                    Executors.newCachedThreadPool()));
+                    Executors.newCachedThreadPool(), Executors.newCachedThreadPool()));
         return bootstrap;
     }
-    
+
     public static final synchronized ServerBootstrap defaultBootstrap(ExecutorService bossExecutor, ExecutorService workExecutor) {
         if (bootstrap == null)
-            bootstrap = new ServerBootstrap(
-                    new NioServerSocketChannelFactory(
-                    bossExecutor,
-                    workExecutor));
+            bootstrap = new ServerBootstrap(new NioServerSocketChannelFactory(bossExecutor, workExecutor));
         return bootstrap;
     }
-    
+
     public static final void release() {
         if (allChannels.size() > 0)
             allChannels.close().awaitUninterruptibly();
         bootstrap.releaseExternalResources();
     }
-    
+
 }
