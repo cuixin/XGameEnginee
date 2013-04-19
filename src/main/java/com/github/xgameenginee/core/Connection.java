@@ -34,14 +34,20 @@ public class Connection {
 
 	private int id;
 	
+	private Object readWriteLock = new Object();
+	
 	private Object attachment;
 	
 	public Object getAttachment() {
-		return attachment;
+	    synchronized (readWriteLock) {
+	        return attachment;
+        }
 	}
 
 	public void setAttachment(Object attachment) {
-		this.attachment = attachment;
+	    synchronized (readWriteLock) {
+	        this.attachment = attachment;
+        }
 	}
 	
 	private ChannelHandlerContext ctx;
